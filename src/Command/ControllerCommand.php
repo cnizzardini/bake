@@ -181,7 +181,12 @@ class ControllerCommand extends BakeCommand
         $renderer = new TemplateRenderer($this->theme);
         $renderer->set($data);
 
-        $contents = $renderer->generate('Bake.Controller/controller');
+        $contents = $renderer->generate(
+            'Bake.Controller/controller',
+            [
+                'template' => $args->getOption('restful') ? 'restful/' : ''
+            ]
+        );
 
         $path = $this->getPath($args);
         $filename = $path . $controllerName . 'Controller.php';
@@ -273,6 +278,9 @@ class ControllerCommand extends BakeCommand
         ])->addOption('no-actions', [
             'boolean' => true,
             'help' => 'Do not generate basic CRUD action methods.',
+        ])->addOption('restful', [
+            'boolean' => true,
+            'help' => 'Bake actions as RESTful methods',
         ]);
 
         return $parser;
